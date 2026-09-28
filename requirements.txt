@@ -1,0 +1,80 @@
+# ============================================================
+# SatQuery AI – requirements.txt (Apple Silicon / Python 3.11)
+# Install order matters for Apple Silicon:
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+#
+# rasterio: use pre-built wheel from conda-forge OR
+#   conda install -c conda-forge rasterio gdal  (recommended)
+#   Fallback pip wheel: pip install rasterio --no-binary rasterio  (requires GDAL system lib)
+# ============================================================
+
+# --- Core ML ---
+torch>=2.3.0           # MPS support stable from 2.0
+torchvision>=0.18.0
+torchaudio>=2.3.0
+
+# --- HuggingFace ---
+transformers>=4.45.0
+peft>=0.12.0
+datasets>=2.20.0
+huggingface-hub>=0.24.0
+accelerate>=0.34.0
+trl>=0.9.0             # for SFT trainer
+
+# --- Vision / SAR ---
+timm>=0.9.12           # EfficientNet, ResNet backbones
+einops>=0.7.0
+albumentations>=1.4.0  # augmentation
+opencv-python-headless>=4.9.0
+Pillow>=10.3.0
+scikit-image>=0.22.0
+
+# --- Geospatial ---
+# rasterio and GDAL: prefer conda-forge (see note above)
+rasterio>=1.3.10
+pyproj>=3.6.1
+shapely>=2.0.4
+geojson>=3.1.0
+
+# --- API / Backend ---
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9  # file uploads
+aiofiles>=23.2.1
+
+# --- Evaluation ---
+nltk>=3.8.1
+rouge-score>=0.1.2
+pycocoevalcap>=1.2      # BLEU/CIDEr for captioning
+scikit-learn>=1.4.0
+numpy>=1.26.0
+pandas>=2.2.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# --- Report generation ---
+reportlab>=4.2.0
+jinja2>=3.1.4
+
+# --- Dev/test ---
+pytest>=8.2.0
+pytest-asyncio>=0.23.0
+httpx>=0.27.0           # async test client for FastAPI
+
+# --- Optional: torchgeo for BigEarthNet streaming ---
+torchgeo>=0.6.0
+
+# --- Optional: mlx-vlm for Mac-native VLM inference ---
+# mlx>=0.16.0           # only on Apple Silicon; uncomment to enable MLX path
+# mlx-vlm>=0.1.0
+
+# ============================================================
+# Mac-specific notes:
+#  1. flash-attention is NOT installed (CUDA only).
+#  2. bitsandbytes is NOT installed (CUDA only).
+#  3. Use attention_implementation="eager" for all transformers calls.
+#  4. rasterio wheel: conda install -c conda-forge rasterio gdal
+#     OR: GDAL_VERSION=3.8.4 pip install GDAL==3.8.4 && pip install rasterio
+#  5. If torch.mps.is_available() is True, code auto-selects MPS.
+# ============================================================
